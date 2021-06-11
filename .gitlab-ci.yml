@@ -9,6 +9,7 @@ train-model:
 
     - echo "Copy logo.png to train folder for example"
     - echo "Copy `logo.png` to `train` folder for example" >> logger.md
+    - mkdir -p train
     - cp logo.png train/
 
     - echo "Trained completed successfully"
