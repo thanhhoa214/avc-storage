@@ -15,7 +15,6 @@ train-model:
     - echo "Push new model to this " $CI_COMMIT_BRANCH  >> logger.md
     - git add .
     - git commit -m "Trained successfully"
-    - 'standard-version --releaseCommitMessageFormat "chore(release): {{currentTag}}"'
     - git remote show origin
     - git remote set-url --push origin git@gitlab:$CI_PROJECT_PATH
     - git remote show origin
