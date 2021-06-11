@@ -12,9 +12,11 @@ train-model:
 
     - echo "# Trained completed successfully" >> logger.md
     - echo "Send notification to Kay server" >> logger.md
+    - echo $CI_COMMIT_BRANCH 
+    - echo $CI_BUILD_REF_NAME 
     - echo "Push new model to this " $CI_COMMIT_BRANCH  >> logger.md
     - git add .
     - git commit -m "Trained successfully"
-    - git push -o ci.skip
+    - git push  -o ci.skip
   tags:
     - worker
