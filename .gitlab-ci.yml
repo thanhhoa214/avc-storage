@@ -13,8 +13,10 @@ train-model:
     - echo "# Trained completed successfully" >> logger.md
     - echo "Send notification to Kay server" >> logger.md
     - echo "Push new model to this " $CI_COMMIT_BRANCH  >> logger.md
-    - git add .
     - echo "$CI_PROJECT_PATH"
+
+    # Push new model back to the repository.
+    - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
     - git remote set-url --push origin git@gitlab.com-fpt:$CI_PROJECT_PATH
