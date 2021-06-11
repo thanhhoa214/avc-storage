@@ -4,18 +4,15 @@ stages:
 train-model:
   stage: train
   script:
-    - echo "Training...." 
     - echo "## Training...." >> logger.md
 
-    - echo "Copy logo.png to train folder for example"
     - echo "Copy `logo.png` to `train` folder for example" >> logger.md
     - mkdir -p train
     - cp logo.png train/
 
-    - echo "Trained completed successfully"
     - echo "# Trained completed successfully" >> logger.md
-    - echo "Send notification to Kay server"
-    - echo "Push new model to this $CI_COMMIT_BRANCH"
+    - echo "Send notification to Kay server" >> logger.md
+    - echo "Push new model to this " $CI_COMMIT_BRANCH  >> logger.md
     - git add .
     - git commit -m "Trained successfully"
     - git push -o ci.skip
