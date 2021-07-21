@@ -5,10 +5,10 @@ train-model:
   stage: train
   script:
     - echo "## Training...."
-    - echo "$CI_PROJECT_PATH env:CI_PROJECT_PATH"
-    - echo "$CI_COMMIT_BRANCH env:CI_COMMIT_BRANCH" 
-    - echo "$CI_PROJECT_DIR env:CI_PROJECT_DIR" 
-    - echo "$CI_BUILDS_DIR env:CI_BUILDS_DIR" 
+    - echo "$CI_PROJECT_PATH"
+    - echo "$CI_COMMIT_BRANCH" 
+    - echo "$CI_PROJECT_DIR" 
+    - echo "$CI_BUILDS_DIR" 
     
     # #Unzip
     # - tar -xf traindata.zip
@@ -17,25 +17,25 @@ train-model:
     # - cd ..
 
     # - cd D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\data
-    # - rmdir /Q /S imgs
+    # - rm -r -Force imgs
 
-    # - move env:CI_BUILDS_DIR/imgs imgs
+    # - move $CI_PROJECT_PATH/imgs imgs
     # - cd ..
-    # - call conda activate yolo2keras_env
+    # - conda activate yolo2keras_env
 
     # #Create_train_test_file
     # - python create_train_test.py -tp 0.2
     # #get_applying_id
-    # - for /F %I in ('curl https://avc-api.azurewebsites.net/api/model/applyingid') do set APPLYING_ID=%I
+    # - $APPLYING_ID = (Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/applyingid).Content
 
     # #Train_model
-    # - copy D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\%APPLYING_ID%.weights .
-    # - darknet detector train data/custom.data coco-tiny-v3-relu.cfg %APPLYING_ID%.weights -map -clear
+    # - cp D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$APPLYING_ID.weights .
+    # - darknet detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear
 
     # - cd ..
-    # - move x64\backup\coco-tiny-v3-relu_best.weights models\%CI_COMMIT_BRANCH%.weights
+    # - move x64\backup\coco-tiny-v3-relu_best.weights models\$CI_COMMIT_BRANCH.weights
     # - cd keras-yolo3
-    # - python convert.py coco-tiny-v3-relu.cfg ..\models\%CI_COMMIT_BRANCH%.weights avc.h5
+    # - python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
 
     # - call conda deactivate
 
@@ -46,14 +46,14 @@ train-model:
     # - call conda deactivate
 
     # - cd ..
-    # - docker run -it --rm -v %cd%:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
-    # - move avc_model_edgetpu.tflite %CI_BUILDS_DIR%\%CI_COMMIT_BRANCH%.tflite
+    # - docker run -it --rm -v $pwd:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
+    # - move avc_model_edgetpu.tflite $CI_PROJECT_PATH\$CI_COMMIT_BRANCH.tflite
 
     # - del avc_model.tflite
 
 
     # # Push new model back to the repository.
-    # - cd $CI_BUILDS_DIR
+    # - cd $CI_PROJECT_PATH
     # - git add .
     # - git commit -m "Trained successfully"
     # - git remote show origin
