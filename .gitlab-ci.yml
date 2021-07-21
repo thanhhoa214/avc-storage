@@ -4,18 +4,13 @@ stages:
 train-model:
   stage: train
   script:
-    - echo "## Training...." >> logger.md
-
-    - echo "Copy `logo.png` to `train` folder for example" >> logger.md
-    - mkdir -p train
-    - cp logo.png train/
-
-    - echo "# Trained completed successfully" >> logger.md
-    - echo "Send notification to Kay server" >> logger.md
-    - echo "Push new model to this " $CI_COMMIT_BRANCH  >> logger.md
+    - echo "## Training...."
     - echo "$CI_PROJECT_PATH"
+    - echo "CI_COMMIT_BRANCH:" $CI_COMMIT_BRANCH 
+    - start run.bat
 
     # Push new model back to the repository.
+    - cd $CI_BUILDS_DIR
     - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
