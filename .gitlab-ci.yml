@@ -12,6 +12,8 @@ train-model:
     - echo "$CI_BUILDS_DIR" 
     # - raise error
     
+    - Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/training -UseBasicParsing -Method Put
+
     #Unzip
     - tar -xf traindata.zip
     - cd labels 
@@ -61,6 +63,7 @@ train-model:
     - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
     - git remote show origin
     - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
+    - Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession -UseBasicParsing -Method Put
   tags:
     - worker
 
@@ -69,7 +72,7 @@ handle_error:
   stage: clean_up
   script:
     - echo "Clear máy cho Sang"
-    - echo "Call Train Failed API here"
+    - Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/failure -UseBasicParsing -Method Put
   when: on_failure
   tags:
     - worker
