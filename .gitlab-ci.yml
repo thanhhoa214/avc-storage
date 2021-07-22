@@ -12,46 +12,49 @@ train-model:
     - echo "$CI_BUILDS_DIR" 
     # - raise error
     
-    # #Unzip
-    # - tar -xf traindata.zip
-    # - cd labels 
-    # - move *.txt ..\imgs 
-    # - cd ..
+    #Unzip
+    - tar -xf traindata.zip
+    - cd labels 
+    - move *.txt ..\imgs 
+    - cd ..
 
-    # - cd D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\data
-    # - rm -r -Force imgs
+    - cd D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\data
+    - rm -r -Force imgs
 
-    # - move $CI_PROJECT_PATH/imgs imgs
-    # - cd ..
-    # - conda activate yolo2keras_env
+    - move $CI_PROJECT_PATH/imgs imgs
+    - cd ..
+    - conda activate yolo2keras_env
 
-    # #Create_train_test_file
-    # - python create_train_test.py -tp 0.2
-    # #get_applying_id
-    # - $APPLYING_ID = (Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/applyingid).Content
+    #Create_train_test_file
+    - python create_train_test.py -tp 0.2
+    #get_applying_id
+    - $APPLYING_ID = (Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/applyingid).Content
 
-    # #Train_model
-    # - cp D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$APPLYING_ID.weights .
-    # - darknet detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear
+    #Train_model
+    - cp D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$APPLYING_ID.weights .
+    - darknet detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear
 
-    # - cd ..
-    # - move x64\backup\coco-tiny-v3-relu_best.weights models\$CI_COMMIT_BRANCH.weights
-    # - cd keras-yolo3
-    # - python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
+    - cd backup
+    - rename coco-tiny-v3-relu_best.weights $CI_COMMIT_BRANCH.weights
+    - cd ..\..
+    - move x64\backup\$CI_COMMIT_BRANCH.weights models
+    - cd keras-yolo3
+    - python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
 
-    # - call conda deactivate
+    - conda deactivate
 
-    # - call conda activate tflite_env
-    # #Convert_tflite
-    # - python keras_to_tflite_quant.py avc.h5 ..\avc_model.tflite
+    - conda activate tflite_env
+    #Convert_tflite
+    - python keras_to_tflite_quant.py avc.h5 ..\avc_model.tflite
 
-    # - call conda deactivate
+    - conda deactivate
 
-    # - cd ..
-    # - docker run -it --rm -v $pwd:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
-    # - move avc_model_edgetpu.tflite $CI_PROJECT_PATH\$CI_COMMIT_BRANCH.tflite
+    - cd ..
+    - docker run -it --rm -v $pwd:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
+    - rename avc_model_edgetpu.tflite $CI_COMMIT_BRANCH.tflite
+    - move $CI_COMMIT_BRANCH.tflite $CI_PROJECT_PATH
 
-    # - del avc_model.tflite
+    - del avc_model.tflite
 
 
     # # Push new model back to the repository.
