@@ -9,6 +9,7 @@ train-model:
     - echo "$CI_COMMIT_BRANCH" 
     - echo "$CI_PROJECT_DIR" 
     - echo "$CI_BUILDS_DIR" 
+    - raise error
     
     # #Unzip
     # - tar -xf traindata.zip
@@ -60,5 +61,15 @@ train-model:
     # - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
     # - git remote show origin
     # - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
+  tags:
+    - worker
+
+
+handle_error:
+  stage: train
+  script:
+    - echo "Clear máy cho Sang"
+    - echo "Call Train Failed API here"
+  when: on_failure
   tags:
     - worker
