@@ -21,50 +21,46 @@ train-model:
     - cd D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\data
     - rm -r -Force imgs
 
-    - move $CI_PROJECT_PATH/imgs imgs
+    - move $CI_PROJECT_DIR/imgs imgs
     - cd ..
-    - conda activate yolo2keras_env
 
     #Create_train_test_file
-    - python create_train_test.py -tp 0.2
+    - conda run -n yolo2keras_env python create_train_test.py -tp 0.2
     #get_applying_id
-    - $APPLYING_ID = (Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/applyingid).Content
+    - $APPLYING_ID = (Invoke-WebRequest -URI https://avc-api.azurewebsites.net/api/model/applyingid -UseBasicParsing).Content
 
     #Train_model
     - cp D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$APPLYING_ID.weights .
-    - darknet detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear
+    - Start-Process -NoNewWindow -Wait -FilePath "D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\darknet.exe" -ArgumentList "detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear"
 
     - cd backup
-    - rename coco-tiny-v3-relu_best.weights $CI_COMMIT_BRANCH.weights
+    - Rename-Item -Path "coco-tiny-v3-relu_best.weights" -NewName "$CI_COMMIT_BRANCH.weights" -Force
     - cd ..\..
-    - move x64\backup\$CI_COMMIT_BRANCH.weights models
+    - Move-Item -Path x64\backup\$CI_COMMIT_BRANCH.weights -Destination models -Force
     - cd keras-yolo3
-    - python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
+    - conda run -n yolo2keras_env python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
 
-    - conda deactivate
-
-    - conda activate tflite_env
     #Convert_tflite
-    - python keras_to_tflite_quant.py avc.h5 ..\avc_model.tflite
-
-    - conda deactivate
+    - conda run -n tflite_env python keras_to_tflite_quant.py avc.h5 ..\avc_model.tflite
 
     - cd ..
-    - docker run -it --rm -v $pwd:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
-    - rename avc_model_edgetpu.tflite $CI_COMMIT_BRANCH.tflite
-    - move $CI_COMMIT_BRANCH.tflite $CI_PROJECT_PATH
+    - docker run --rm -v ${pwd}:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
+    - Rename-Item -Path "avc_model_edgetpu.tflite" -NewName "$CI_COMMIT_BRANCH.tflite"
+    - Move-Item -Path "$CI_COMMIT_BRANCH.tflite" -Destination "$CI_PROJECT_DIR" -Force
 
-    - del avc_model.tflite
+    - Remove-Item avc_model.tflite
 
 
-    # # Push new model back to the repository.
-    # - cd $CI_PROJECT_PATH
-    # - git add .
-    # - git commit -m "Trained successfully"
-    # - git remote show origin
-    # - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
-    # - git remote show origin
-    # - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
+    # Push new model back to the repository.
+    - cd $CI_PROJECT_DIR
+    - git config --global user.email "sangnvse130361@fpt.edu.vn"
+    - git config --global user.name "Sang Ngo"
+    - git add .
+    - git commit -m "Trained successfully"
+    - git remote show origin
+    - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
+    - git remote show origin
+    - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
   tags:
     - worker
 
