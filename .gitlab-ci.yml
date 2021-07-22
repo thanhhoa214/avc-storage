@@ -10,7 +10,7 @@ train-model:
     - echo "$CI_COMMIT_BRANCH" 
     - echo "$CI_PROJECT_DIR" 
     - echo "$CI_BUILDS_DIR" 
-    - raise error
+    # - raise error
     
     # #Unzip
     # - tar -xf traindata.zip
