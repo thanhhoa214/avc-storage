@@ -12,7 +12,7 @@ train-model:
     - echo "$CI_BUILDS_DIR" 
     # - raise error
     
-    - Invoke-WebRequest -URI "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/training" -UseBasicParsing -Method Put
+    - Invoke-WebRequest -URI "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/trainning" -UseBasicParsing -Method Put
 
     #Unzip
     - tar -xf traindata.zip
