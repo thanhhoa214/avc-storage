@@ -21,7 +21,7 @@ train-model:
     - cd ..
 
     - cd D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\data
-    - rm -r -Force imgs
+    - if( Test-Path -Path imgs) {rm -r -Force imgs}
 
     - move $CI_PROJECT_DIR/imgs imgs
     - cd ..
