@@ -94,6 +94,7 @@ handle_error:
 test_git: 
   stage: train
   script: 
+    - git checkout $CI_COMMIT_REF_NAME
 
   #  - cmd /c 'ssh-agent'
    # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -112,7 +113,6 @@ test_git:
     - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
-    - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
-    - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
+    - git push
   tags:
     - kay
