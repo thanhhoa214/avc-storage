@@ -61,8 +61,8 @@ train-model:
     - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
-    - git remote rm origin
-    - git remote add origin git@gitlab.com:adc-capstone/adc-storage
+    # - git remote rm origin
+    - git remote set-url origin git@gitlab.com:adc-capstone/adc-storage
     - git remote show origin
     - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
     - Invoke-WebRequest -URI "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession" -UseBasicParsing -Method Put
