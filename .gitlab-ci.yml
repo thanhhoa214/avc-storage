@@ -41,7 +41,7 @@ train-model:
     # - cd ..\..
     # - Move-Item -Path x64\backup\$CI_COMMIT_BRANCH.weights -Destination models -Force
     - Move-Item -Path backup\coco-tiny-v3-relu_best.weights -Destination D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$CI_COMMIT_BRANCH.weights -Force
-    - cd keras-yolo3
+    - cd ..\keras-yolo3
     - conda run -n yolo2keras_env python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
 
     #Convert_tflite
