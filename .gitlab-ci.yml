@@ -87,3 +87,15 @@ handle_error:
   except:
     - default
     - master
+
+test_git: 
+  stage: train
+  script: 
+    - echo "Hello" >> test.txt
+    - git add .
+    - git commit -m "Trained successfully"
+    - git remote show origin
+    - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
+    - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
+  tags:
+    - kay
