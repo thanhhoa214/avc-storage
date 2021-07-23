@@ -94,15 +94,11 @@ handle_error:
 test_git: 
   stage: train
   script: 
-    - apt-get update -qq
-    - apt-get install -qq git
-    # Setup SSH deploy keys
-    - which ssh-agent
+    - cmd /c 'which ssh-agent || ( apt-get install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - cmd /c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    - cmd /c 'ssh-add <(echo "$SSH_PRIVATE_KEY")''
     - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]]
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - cmd /c '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
     - ssh-keyscan gitlab.com
     - echo "Hello" >> test.txt
