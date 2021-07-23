@@ -91,6 +91,7 @@ handle_error:
 test_git: 
   stage: train
   script: 
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - git config --global user.email "huytmse130336@fpt.edu.vn"
     - git config --global user.name "Minh Huy"
     - echo "Hello" >> test.txt
