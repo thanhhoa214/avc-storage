@@ -97,7 +97,7 @@ test_git:
 
     - cmd /c 'ssh-agent'
 
-    - bash /c 'eval $(ssh-agent -s)'
+    - cmd /c 'ssh-add'
 
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
