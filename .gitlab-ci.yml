@@ -106,6 +106,7 @@ test_git:
     #- ssh-keyscan gitlab.com
     - echo "Hello" >> test.txt
     - ssh-keyscan gitlab.com
+    - echo $CI_COMMIT_REF_NAME
     - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
