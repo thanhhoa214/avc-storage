@@ -95,19 +95,15 @@ test_git:
   stage: train
   script: 
 
-    - cmd /c 'ssh-agent'
+  #  - cmd /c 'ssh-agent'
+   # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
-    - cmd /c 'ssh-add'
+    #- mkdir -p ~/.ssh
+    #- chmod 700 ~/.ssh
+    #- ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    #- chmod 644 ~/.ssh/known_hosts
 
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - ssh git@gitlab.com
-
-    - ssh-keyscan gitlab.com
+    #- ssh-keyscan gitlab.com
     - echo "Hello" >> test.txt
     - git add .
     - git commit -m "Trained successfully"
