@@ -56,9 +56,7 @@ train-model:
 
     # Push new model back to the repository.
     - cd $CI_PROJECT_DIR
-    - $form = @{ modelFile = Get-Item -Path "$CI_COMMIT_BRANCH.tflite" }
-    - $uri = "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession"
-    - Invoke-WebRequest -Uri $uri -Method Post -Form $form  -UseBasicParsing
+    - python send_success_model.py $CI_COMMIT_BRANCH
   tags:
     - worker
   except:
