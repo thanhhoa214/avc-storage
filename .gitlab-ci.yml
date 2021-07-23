@@ -108,7 +108,6 @@ test_git:
    # - git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
     #- ssh-add
     - echo "Hello" >> test.txt
-    - ssh-keyscan gitlab.com
     - echo $CI_COMMIT_REF_NAME
     - git add .
     - git commit -m "Trained successfully"
