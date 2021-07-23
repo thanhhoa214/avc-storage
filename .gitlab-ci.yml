@@ -95,7 +95,7 @@ test_git:
   stage: train
   script: 
 
-    - cmd /c'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - cmd /c 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
 
     - eval $(ssh-agent -s)
 
