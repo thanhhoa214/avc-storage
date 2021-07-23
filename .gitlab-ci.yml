@@ -69,6 +69,10 @@ train-model:
     - Invoke-WebRequest -URI "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession" -UseBasicParsing -Method Put
   tags:
     - worker
+  except:
+    - default
+    - master
+
 
 
 handle_error:
@@ -79,3 +83,6 @@ handle_error:
   when: on_failure
   tags:
     - worker
+  except:
+    - default
+    - master
