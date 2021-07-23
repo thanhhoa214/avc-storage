@@ -106,7 +106,7 @@ test_git:
     #- ssh-keyscan gitlab.com
     - Start-Service ssh-agent
     - git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
-    - ssh-add C:\Users\Kay\.ssh\id_rsa
+    - ssh-add
     - echo "Hello" >> test.txt
     - ssh-keyscan gitlab.com
     - echo $CI_COMMIT_REF_NAME
