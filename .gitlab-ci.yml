@@ -104,9 +104,9 @@ test_git:
     #- chmod 644 ~/.ssh/known_hosts
 
     #- ssh-keyscan gitlab.com
-    - Start-Service ssh-agent
-    - git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
-    - ssh-add
+  #  - Start-Service ssh-agent
+   # - git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
+    #- ssh-add
     - echo "Hello" >> test.txt
     - ssh-keyscan gitlab.com
     - echo $CI_COMMIT_REF_NAME
