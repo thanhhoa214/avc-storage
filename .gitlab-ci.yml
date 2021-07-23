@@ -113,6 +113,6 @@ test_git:
     - git add .
     - git commit -m "Trained successfully"
     - git remote show origin
-    - git push
+    - git push -o ci.skip
   tags:
     - kay
