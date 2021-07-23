@@ -36,10 +36,11 @@ train-model:
     # - Start-Process -NoNewWindow -Wait -FilePath "C:\Program Files\Docker\Docker\Docker Desktop.exe" 
     - Start-Process -NoNewWindow -Wait -FilePath "D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\darknet.exe" -ArgumentList "detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear"
 
-    - cd backup
-    - Rename-Item -Path "coco-tiny-v3-relu_best.weights" -NewName "$CI_COMMIT_BRANCH.weights" -Force
-    - cd ..\..
-    - Move-Item -Path x64\backup\$CI_COMMIT_BRANCH.weights -Destination models -Force
+    # - cd backup
+    # - Rename-Item -Path "coco-tiny-v3-relu_best.weights" -NewName "$CI_COMMIT_BRANCH.weights" -Force
+    # - cd ..\..
+    # - Move-Item -Path x64\backup\$CI_COMMIT_BRANCH.weights -Destination models -Force
+    - Move-Item -Path backup\coco-tiny-v3-relu_best.weights -Destination D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$CI_COMMIT_BRANCH.weights -Force
     - cd keras-yolo3
     - conda run -n yolo2keras_env python convert.py coco-tiny-v3-relu.cfg ..\models\$CI_COMMIT_BRANCH.weights avc.h5
 
@@ -48,11 +49,12 @@ train-model:
 
     - cd ..
     - docker run --rm -v ${pwd}:/home/edgetpu edgetpu-compiler-avc edgetpu_compiler avc_model.tflite
-    - Rename-Item -Path "avc_model_edgetpu.tflite" -NewName "$CI_COMMIT_BRANCH.tflite"
-    - Move-Item -Path "$CI_COMMIT_BRANCH.tflite" -Destination "$CI_PROJECT_DIR" -Force
-
-    - Remove-Item avc_model.tflite
-
+    # - Rename-Item -Path "avc_model_edgetpu.tflite" -NewName "$CI_COMMIT_BRANCH.tflite"
+    # - Move-Item -Path "$CI_COMMIT_BRANCH.tflite" -Destination "$CI_PROJECT_DIR" -Force
+    - Move-Item -Path "avc_model_edgetpu.tflite" -Destination "$CI_PROJECT_DIR\$CI_COMMIT_BRANCH.tflite" -Force
+    # - Remove-Item avc_model.tflite
+    - if( Test-Path -Path D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\avc_model.tflite) {Remove-Item -Path D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\avc_model.tflite}
+    - if( Test-Path -Path D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\$APPLYING_ID.weights) {Remove-Item -Path D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\$APPLYING_ID.weights}
 
     # Push new model back to the repository.
     - cd $CI_PROJECT_DIR
