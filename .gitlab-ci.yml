@@ -56,17 +56,9 @@ train-model:
 
     # Push new model back to the repository.
     - cd $CI_PROJECT_DIR
-    - git config --global user.email "sangnvse130361@fpt.edu.vn"
-    - git config --global user.name "Sang Ngo"
-    - git add .
-    - git commit -m "Trained successfully"
-    - git remote show origin
-    # - git remote rm origin
-    - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
-    # - git remote set-url --fetch origin git@gitlab.com:$CI_PROJECT_PATH
-    - git remote show origin
-    - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
-    - Invoke-WebRequest -URI "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession" -UseBasicParsing -Method Put
+    - $form = @{ modelFile = Get-Item -Path "$CI_COMMIT_BRANCH.tflite" }
+    - $uri = "https://avc-api.azurewebsites.net/api/model/$CI_COMMIT_BRANCH/succession"
+    - Invoke-WebRequest -Uri $uri -Method Post -Form $form  -UseBasicParsing
   tags:
     - worker
   except:
@@ -88,30 +80,3 @@ handle_error:
     - master
 
   
- 
-
-test_git: 
-  stage: train
-  script:
-
-  #  - cmd /c 'ssh-agent'
-   # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-
-    #- mkdir -p ~/.ssh
-    #- chmod 700 ~/.ssh
-    #- ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
-    #- chmod 644 ~/.ssh/known_hosts
-
-    #- ssh-keyscan gitlab.com
-    - Start-Service ssh-agent
-   # - git config --global core.sshCommand C:/Windows/System32/OpenSSH/ssh.exe
-    - ssh-add
-    - echo "Hello" >> test.txt
-    - echo $CI_COMMIT_REF_NAME
-    - git add .
-    - git commit -m "Trained successfully"
-    - git remote set-url --push origin git@gitlab.com:$CI_PROJECT_PATH
-    - git remote show origin
-    - git push --follow-tags origin HEAD:$CI_COMMIT_REF_NAME -o ci.skip
-  tags:
-    - kay
