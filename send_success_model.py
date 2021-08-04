@@ -8,6 +8,6 @@ args = parser.parse_args()
 print("CI_COMMIT_BRANCH = " + str(args.id))
 
 url = "https://avc-api.azurewebsites.net/api/model/"+str(args.id)+"/succession"
-files = {'modelFile': open(str(args.id)+'.tflite','rb')}
+files = {'modelFile': open(str(args.id) + '.tflite', 'rb'), 'statisticFile': open('chart.png', 'rb')}
 
 requests.post(url, files=files)

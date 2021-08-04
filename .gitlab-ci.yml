@@ -35,7 +35,7 @@ train-model:
     - cp D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\models\$APPLYING_ID.weights .
     # - Start-Process -NoNewWindow -Wait -FilePath "C:\Program Files\Docker\Docker\Docker Desktop.exe" 
     - Start-Process -NoNewWindow -Wait -FilePath "D:\Docker\AVC-EdgeTPU-Compiler\edgetpu-compiler\x64\darknet.exe" -ArgumentList "detector train data/custom.data coco-tiny-v3-relu.cfg $APPLYING_ID.weights -map -clear > file_log_name.log"
-
+    - cp chart.png $CI_PROJECT_DIR
     # - cd backup
     # - Rename-Item -Path "coco-tiny-v3-relu_best.weights" -NewName "$CI_COMMIT_BRANCH.weights" -Force
     # - cd ..\..
